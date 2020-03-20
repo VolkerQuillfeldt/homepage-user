@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class Constants {
 
 	protected HashMap<String, String> mailText = new HashMap<>();
-	protected static String htmlBR = "<br />";
+	protected static String htmlBR =  "<br />";
 	
 
 	private void initialize() {
