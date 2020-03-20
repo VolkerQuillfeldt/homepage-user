@@ -13,17 +13,23 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
+@ComponentScan("lib.vqui.de")
 @Component("UserDatabaseWorker")
 public class UserDatabaseWorker {
+	
+	@Autowired
+	private EMailService emailService;
 
 	protected SessionFactory sessionFactory;
 	private static final String ERRORMESSAGEACTIVATION = "Account activation failed, please try again later or reset password if already activated !";
-	private static final String ERRORMESSAGEPASSWORD = "Account password change failed, please try again later !";
+	private static final String ERRORMESSAGEPWORD = "Account password change failed, please try again later !";
 	private static final String MESSAGEOK = "Account password changed!";
 	@Value("${hibernate.config}")
 	String hibernateConfig;
@@ -56,7 +62,7 @@ public class UserDatabaseWorker {
 			user.actionKey = SCryptUtil.scrypt(user.email, 16, 16, 16);
 			thisReturn.setId((long) session.save(user));
 			try {
-				EMailService.sendMail(constants, user.email, user.actionType, user.actionKey);
+				emailService.sendMail(constants, user.email, user.actionType, user.actionKey);
 				thisReturn.setMessage("Account registered, please see your mail to activate your account!");
 			} catch (Exception e) {
 				session.getTransaction().rollback();
@@ -146,7 +152,7 @@ public class UserDatabaseWorker {
 					tx.commit();
 
 					try {
-						EMailService.sendMail(constants, user.email, user.actionType, user.actionKey);
+						emailService.sendMail(constants, user.email, user.actionType, user.actionKey);
 					} catch (Exception e) {
 						session.getTransaction().rollback();
 						thisReturn.setId(-10l);
@@ -173,6 +179,8 @@ public class UserDatabaseWorker {
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
+			
+			System.out.println(userJSON.getActionKey());
 
 			String hql = "SELECT u from User u where u.actionKey='" + userJSON.getActionKey() + "'";
 			Query<User> query = session.createQuery(hql);
@@ -192,13 +200,15 @@ public class UserDatabaseWorker {
 				}
 			} else {
 				thisReturn.setId(-11l);
-				thisReturn.setMessage(ERRORMESSAGEPASSWORD);
+				thisReturn.setMessage(ERRORMESSAGEPWORD);
 			}
 
 		} catch (HibernateException e) {
 
+			e.printStackTrace();
+			
 			thisReturn.setId(-12l);
-			thisReturn.setMessage(ERRORMESSAGEPASSWORD);
+			thisReturn.setMessage(ERRORMESSAGEPWORD);
 
 		} finally {
 			if (session != null)
@@ -242,7 +252,7 @@ public class UserDatabaseWorker {
 				session.save(adminUser);
 
 				try {
-					EMailService.sendMail(constants, adminUser.email, adminUser.actionType, adminUser.actionKey);
+					emailService.sendMail(constants, adminUser.email, adminUser.actionType, adminUser.actionKey);
 				} catch (Exception e) {
 					session.getTransaction().rollback();
 					e.printStackTrace();
