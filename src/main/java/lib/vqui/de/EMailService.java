@@ -7,6 +7,7 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,9 @@ public class EMailService {
 	
 	@Autowired
 	private PasswordService pwService;
+	
+	@Value("${email.link.host}")
+	String emailLinkHost;
 	
 	public void sendMail(Constants constants, String toEmail, String actionType, String actionKey) {
 
@@ -42,8 +46,10 @@ public class EMailService {
 		};
 
 		Session session = Session.getDefaultInstance(props, auth);
+		
+		
 
-		EMailWriter.sendEmail(constants, session, toEmail, actionType, actionKey);
+		EMailWriter.sendEmail(emailLinkHost , constants, session, toEmail, actionType, actionKey);
 	}
 
 }

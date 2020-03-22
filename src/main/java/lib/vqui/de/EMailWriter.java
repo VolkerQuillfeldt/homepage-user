@@ -12,7 +12,7 @@ public class EMailWriter {
 
 	}
 
-	public static void sendEmail(Constants constants, Session session, String toEmail, String actionType,
+	public static void sendEmail(String emailLinkHost, Constants constants, Session session, String toEmail, String actionType,
 			String actionKey) {
 
 		try {
@@ -28,7 +28,7 @@ public class EMailWriter {
 			msg.setSubject(constants.getMailText().get(actionType + "Subject"), "UTF-8");
 
 			String mailText = constants.getMailText().get(actionType + "Text");
-			mailText = mailText.replace("<host>", "localhost");
+			mailText = mailText.replace("<host>", emailLinkHost );
 			mailText = mailText.replace("<actionKey>", actionKey);
 			msg.setContent(mailText, "text/html");
 
