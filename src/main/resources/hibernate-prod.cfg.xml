@@ -5,7 +5,7 @@
 <hibernate-configuration>      
   <session-factory>
     <!-- Database connection settings -->
-   	<property name="connection.url">jdbc:postgresql://vquillfeldt.de:5433/homepage</property> <!-- BD Mane -->
+   	<property name="connection.url">jdbc:postgresql://vquillfeldt.de:5433/userdb</property> <!-- BD Mane -->
    	<property name="connection.driver_class">org.postgresql.Driver</property> <!-- DB Driver -->
    		<property name="connection.username">usereditor</property> <!-- DB User -->
    		<property name="connection.password">useredit</property> <!-- DB Password -->
