@@ -57,6 +57,11 @@ public class UserDatabaseWorker {
 		ReturnJSON thisReturn = new ReturnJSON();
 		Session session = null;
 		try {
+			
+			if( sessionFactory.isClosed()) {
+				setup();
+			}
+			
 			session = sessionFactory.openSession();
 			user.actionType = "activate";
 			user.actionKey = SCryptUtil.scrypt(user.email, 16, 16, 16);
@@ -85,15 +90,21 @@ public class UserDatabaseWorker {
 		} finally {
 			if (session != null)
 				session.close();
+			if(sessionFactory !=null) 
+				sessionFactory.close();
+			
 		}
 		return thisReturn;
 	}
 
-	public ReturnJSON activateUser(String actionKey) {
+	protected  ReturnJSON activateUser(String actionKey) {
 		ReturnJSON thisReturn = new ReturnJSON();
 		Session session = null;
 
 		try {
+			if( sessionFactory.isClosed()) {
+				setup();
+			}
 			session = sessionFactory.openSession();
 
 			String hql = "SELECT u from User u where u.actionKey='" + actionKey + "'";
@@ -125,17 +136,26 @@ public class UserDatabaseWorker {
 		} finally {
 			if (session != null)
 				session.close();
+			if(sessionFactory !=null) 
+				sessionFactory.close();
+			
 		}
 
 		return thisReturn;
 	}
 
-	public ReturnJSON requestNewPasswordforUser(String email, Constants constants) {
+	protected ReturnJSON requestNewPasswordforUser(String email, Constants constants) {
+		
 		ReturnJSON thisReturn = new ReturnJSON();
 		thisReturn.setId(0);
 		thisReturn.setMessage("An email to reset your password was sent, if an account excists.");
 		Session session = null;
 		try {
+			
+			if( sessionFactory.isClosed()) {
+				setup();
+			}
+			
 			session = sessionFactory.openSession();
 
 			String hql = "SELECT u from User u where u.email='" + email + "'";
@@ -170,14 +190,20 @@ public class UserDatabaseWorker {
 		} finally {
 			if (session != null)
 				session.close();
+			if(sessionFactory !=null) 
+				sessionFactory.close();
+			
 		}
 		return thisReturn;
 	}
 
-	public ReturnJSON setNewPasswordForUser(UserJSON userJSON) {
+	protected  ReturnJSON setNewPasswordForUser(UserJSON userJSON) {
 		ReturnJSON thisReturn = new ReturnJSON();
 		Session session = null;
 		try {
+			if( sessionFactory.isClosed()) {
+				setup();
+			}
 			session = sessionFactory.openSession();
 			
 			System.out.println(userJSON.getActionKey());
@@ -213,12 +239,17 @@ public class UserDatabaseWorker {
 		} finally {
 			if (session != null)
 				session.close();
+			if(sessionFactory !=null) 
+				sessionFactory.close();
+						
 		}
 		return thisReturn;
 	}
 
 	protected void exit() {
-		sessionFactory.close();
+		if(sessionFactory !=null) 
+			sessionFactory.close();
+		
 	}
 
 	@PostConstruct
@@ -227,10 +258,13 @@ public class UserDatabaseWorker {
 
 	}
 
-	public void checkAdmin(Constants constants) {
+	protected  void checkAdmin(Constants constants) {
 
 		Session session = null;
 		try {
+			if( sessionFactory.isClosed()) {
+				setup();
+			}
 			session = sessionFactory.openSession();
 
 			String email = "admin@vquillfeldt.de";
@@ -267,16 +301,23 @@ public class UserDatabaseWorker {
 		} finally {
 			if (session != null)
 				session.close();
+			if(sessionFactory !=null) 
+				sessionFactory.close();
+			
 		}
 	}
 
-	public ReturnJSON loginUser(UserJSON userJSON) {
+	protected  ReturnJSON loginUser(UserJSON userJSON) {
 		
 		ReturnJSON thisReturn = new ReturnJSON();
 		thisReturn.setId(-11);
 		thisReturn.setMessage("No login into account, please register or change password !");
 		Session session = null;
 		try {
+			if( sessionFactory.isClosed()) {
+				setup();
+			}
+			
 			session = sessionFactory.openSession();
 
 			String hql = "SELECT u from User u where u.email='" + userJSON.getEmail() + "'";
@@ -303,6 +344,9 @@ public class UserDatabaseWorker {
 		} finally {
 			if (session != null)
 				session.close();
+			if(sessionFactory !=null) 
+				sessionFactory.close();
+			
 		}
 		return thisReturn;
 	}
