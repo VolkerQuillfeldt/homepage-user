@@ -98,14 +98,18 @@ public class UserDatabaseWorker {
 	}
 
 	protected ReturnJSON activateUser(String actionKey) {
+		
 		ReturnJSON thisReturn = new ReturnJSON();
 		SessionFactory sessionFactory = null;
 		Session session = null;
 		try {
+			
 			sessionFactory = setup();
+		
 			if (sessionFactory.isOpen()) {
+				
 				session = sessionFactory.openSession();
-
+				
 				String hql = "SELECT u from User u where u.actionKey='" + actionKey + "'";
 				Query<User> query = session.createQuery(hql);
 
