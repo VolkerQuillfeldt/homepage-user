@@ -6,10 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
 import com.lambdaworks.crypto.SCryptUtil;
 
 @Entity
-@Table(name = "us.user")
+
+@Table(name = "user", schema="us")
 public class User {
 
 	public User() {
