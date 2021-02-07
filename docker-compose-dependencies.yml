@@ -1,0 +1,11 @@
+version: '2'
+services:
+  postgres:
+    # name needs to be unique or empty
+    container_name: userdb-postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: 123123123
+      POSTGRES_DB: userdb
+    ports:
+      - "5435:5432"

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import sun.misc.BASE64Decoder;
+import java.util.Base64;
 
 @SuppressWarnings("restriction")
 @Component("PasswordService")
@@ -32,21 +32,7 @@ public class PasswordService {
 		if (encstr.length() > 12) {
 
 			String cipher = encstr.substring(12);
-
-			BASE64Decoder decoder = new BASE64Decoder();
-
-			try {
-
-				return new String(decoder.decodeBuffer(cipher));
-
-			} catch (IOException e) {
-
-				// throw new InvalidImplementationException(
-
-				// Fail
-
-			}
-
+			return new String(Base64.getDecoder().decode(cipher));
 		}
 
 		return null;

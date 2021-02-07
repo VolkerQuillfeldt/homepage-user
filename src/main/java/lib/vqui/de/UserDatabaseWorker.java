@@ -7,15 +7,18 @@ import javax.annotation.PostConstruct;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.lambdaworks.crypto.SCryptUtil;
+import org.springframework.stereotype.Service;
 
 @ComponentScan("lib.vqui.de")
 @Component("UserDatabaseWorker")
+@Service
 public class UserDatabaseWorker {
-	
+
 	@Autowired
 	private EMailService emailService;
 	
