@@ -1,14 +1,14 @@
-package lib.vqui.de;
+package lib.vqui.de.services;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component("Constants")
-public class Constants {
+@Service
+class Constants {
 
 	protected HashMap<String, String> mailText = new HashMap<>();
 	protected static String htmlBR =  "<br />";

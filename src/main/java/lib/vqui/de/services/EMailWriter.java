@@ -1,21 +1,25 @@
-package lib.vqui.de;
+package lib.vqui.de.services;
 
+import java.io.UnsupportedEncodingException;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class EMailWriter {
+@Service
+class EMailWriter {
 
-	private EMailWriter() {
+	@Autowired
+	private Constants constants;
 
-	}
+	public void sendEmail(String emailLinkHost, Session session, String toEmail, String actionType,
+			String actionKey) throws MessagingException, UnsupportedEncodingException {
 
-	public static void sendEmail(String emailLinkHost, Constants constants, Session session, String toEmail, String actionType,
-			String actionKey) {
 
-		try {
 
 			MimeMessage msg = new MimeMessage(session);
 			// set message headers
@@ -36,8 +40,6 @@ public class EMailWriter {
 
 			Transport.send(msg);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 	}
 }

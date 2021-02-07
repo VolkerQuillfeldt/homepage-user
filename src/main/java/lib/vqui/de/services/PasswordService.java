@@ -1,15 +1,11 @@
-package lib.vqui.de;
+package lib.vqui.de.services;
 
-import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 
-@SuppressWarnings("restriction")
-@Component("PasswordService")
 @Service
 public class PasswordService {
 

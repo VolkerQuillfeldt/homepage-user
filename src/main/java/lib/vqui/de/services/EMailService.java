@@ -1,31 +1,32 @@
-package lib.vqui.de;
+package lib.vqui.de.services;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Configuration
-@ComponentScan("lib.vqui.de")
-@Component("EMailService")
+
 @Service
-public class EMailService {
+class EMailService {
 	
 	@Autowired
 	private PasswordService pwService;
+
+	@Autowired
+	private EMailWriter eMailWriter;
 	
 	@Value("${email.link.host}")
 	String emailLinkHost;
 	
-	public void sendMail(Constants constants, String toEmail, String actionType, String actionKey) {
+	public void sendMail( String toEmail, String actionType, String actionKey)
+			throws UnsupportedEncodingException, MessagingException {
 
 		final String fromEmail = "no-reply@vquillfeldt.de"; // requires valid gmail id
 		final String password =  pwService.getEMailPassword() ; // correct password for gmail id
@@ -48,10 +49,9 @@ public class EMailService {
 		};
 
 		Session session = Session.getDefaultInstance(props, auth);
-		
-		
 
-		EMailWriter.sendEmail(emailLinkHost , constants, session, toEmail, actionType, actionKey);
+
+		eMailWriter.sendEmail(emailLinkHost , session, toEmail, actionType, actionKey);
 	}
 
 }
